@@ -1,0 +1,103 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="_Recursos\css\" />
+    <Folder Include="_Recursos\logos\" />
+    <Folder Include="_Recursos\views-com-bootstrap\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+    <None Remove="Microsoft.EntityFrameworkCore.Sqlite" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\site.css" />
+    <None Include="wwwroot\images\logo.png" />
+    <None Include="wwwroot\images\produtos\large_001.jpg" />
+    <None Include="wwwroot\images\produtos\large_002.jpg" />
+    <None Include="wwwroot\images\produtos\large_003.jpg" />
+    <None Include="wwwroot\images\produtos\large_004.jpg" />
+    <None Include="wwwroot\images\produtos\large_005.jpg" />
+    <None Include="wwwroot\images\produtos\large_006.jpg" />
+    <None Include="wwwroot\images\produtos\large_007.jpg" />
+    <None Include="wwwroot\images\produtos\large_008.jpg" />
+    <None Include="wwwroot\images\produtos\large_009.jpg" />
+    <None Include="wwwroot\images\produtos\large_010.jpg" />
+    <None Include="wwwroot\images\produtos\large_011.jpg" />
+    <None Include="wwwroot\images\produtos\large_012.jpg" />
+    <None Include="wwwroot\images\produtos\large_013.jpg" />
+    <None Include="wwwroot\images\produtos\large_014.jpg" />
+    <None Include="wwwroot\images\produtos\large_015.jpg" />
+    <None Include="wwwroot\images\produtos\large_016.jpg" />
+    <None Include="wwwroot\images\produtos\large_017.jpg" />
+    <None Include="wwwroot\images\produtos\large_018.jpg" />
+    <None Include="wwwroot\images\produtos\large_019.jpg" />
+    <None Include="wwwroot\images\produtos\large_020.jpg" />
+    <None Include="wwwroot\images\produtos\large_021.jpg" />
+    <None Include="wwwroot\images\produtos\large_022.jpg" />
+    <None Include="wwwroot\images\produtos\large_023.jpg" />
+    <None Include="wwwroot\images\produtos\large_024.jpg" />
+    <None Include="wwwroot\images\produtos\large_025.jpg" />
+    <None Include="wwwroot\images\produtos\large_026.jpg" />
+    <None Include="wwwroot\images\produtos\large_027.jpg" />
+    <None Include="wwwroot\images\produtos\large_028.jpg" />
+    <None Include="wwwroot\images\produtos\large_029.jpg" />
+    <None Include="wwwroot\images\produtos\large_030.jpg" />
+    <None Include="wwwroot\images\produtos\large_031.jpg" />
+    <None Include="wwwroot\images\produtos\large_032.jpg" />
+    <None Include="wwwroot\images\produtos\large_033.jpg" />
+    <None Include="wwwroot\images\produtos\large_034.jpg" />
+    <None Include="wwwroot\images\produtos\large_035.jpg" />
+    <None Include="wwwroot\images\produtos\large_036.jpg" />
+    <None Include="wwwroot\images\produtos\large_037.jpg" />
+    <None Include="wwwroot\images\produtos\large_038.jpg" />
+    <None Include="wwwroot\images\produtos\large_039.jpg" />
+    <None Include="wwwroot\images\produtos\large_040.jpg" />
+    <None Include="wwwroot\images\produtos\large_041.jpg" />
+    <None Include="wwwroot\images\produtos\large_042.jpg" />
+    <None Include="wwwroot\images\produtos\large_043.jpg" />
+    <None Include="wwwroot\images\produtos\large_044.jpg" />
+    <None Include="wwwroot\images\produtos\large_045.jpg" />
+    <None Include="wwwroot\images\produtos\large_046.jpg" />
+    <None Include="wwwroot\images\produtos\large_047.jpg" />
+    <None Include="wwwroot\images\produtos\large_048.jpg" />
+    <None Include="wwwroot\images\produtos\large_049.jpg" />
+    <None Include="wwwroot\images\produtos\large_050.jpg" />
+    <None Include="wwwroot\images\produtos\large_051.jpg" />
+    <None Include="wwwroot\images\produtos\large_052.jpg" />
+    <None Include="wwwroot\images\produtos\large_053.jpg" />
+    <None Include="wwwroot\images\produtos\large_054.jpg" />
+    <None Include="wwwroot\images\produtos\large_055.jpg" />
+    <None Include="wwwroot\images\produtos\large_056.jpg" />
+    <None Include="wwwroot\images\produtos\large_057.jpg" />
+    <None Include="wwwroot\images\produtos\large_058.jpg" />
+    <None Include="wwwroot\images\produtos\large_059.jpg" />
+    <None Include="wwwroot\images\produtos\large_060.jpg" />
+    <None Include="wwwroot\images\produtos\large_061.jpg" />
+    <None Include="wwwroot\images\produtos\large_062.jpg" />
+    <None Include="wwwroot\images\produtos\large_063.jpg" />
+    <None Include="wwwroot\images\produtos\large_064.jpg" />
+    <None Include="wwwroot\images\produtos\large_065.jpg" />
+    <None Include="wwwroot\images\produtos\livros.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.18.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
+  </ItemGroup>
+
+</Project>

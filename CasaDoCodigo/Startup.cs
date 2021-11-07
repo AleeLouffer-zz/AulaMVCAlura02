@@ -6,10 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CasaDoCodigo.Repositorios;
+using Newtonsoft.Json.Serialization;
 
 namespace CasaDoCodigo
 {
@@ -26,6 +24,11 @@ namespace CasaDoCodigo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
+
             services.AddApplicationInsightsTelemetry();
             services.AddDistributedMemoryCache();
             services.AddSession();
@@ -56,7 +59,7 @@ namespace CasaDoCodigo
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+             
             app.UseSession();
 
             app.UseRouting();

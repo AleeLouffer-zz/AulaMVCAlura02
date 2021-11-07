@@ -43,29 +43,44 @@ namespace CasaDoCodigo.Models
         }
 
         public virtual Pedido Pedido { get; set; }
-        [Required]
+        [MinLength(5, ErrorMessage = "Nome deve ter no minimo 5 caracteres")]
+        [MaxLength(50, ErrorMessage = "Nome deve ter no maximo 50 caracteres")]
+        [Required(ErrorMessage = "Nome é obrigatorio")]
         public string Nome { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Email é obrigatorio")]
         public string Email { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Telefone é obrigatorio")]
         public string Telefone { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Endereco é obrigatorio")]
         public string Endereco { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Complemento é obrigatorio")]
         public string Complemento { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Bairro é obrigatorio")]
         public string Bairro { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Municipio é obrigatorio")]
         public string Municipio { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "UF é obrigatorio")]
         public string UF { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "CEP é obrigatorio")]
         public string CEP { get; set; } = "";
+
+        internal void Update(Cadastro novoCadastro)
+        {
+            Bairro = novoCadastro.Bairro;
+            CEP = novoCadastro.CEP;
+            Nome = novoCadastro.Nome;
+            Email = novoCadastro.Email;
+            Telefone = novoCadastro.Telefone;
+            Endereco = novoCadastro.Endereco;
+            Complemento = novoCadastro.Complemento;
+            Municipio = novoCadastro.Municipio;
+            UF = novoCadastro.UF;
+        }
     }
 
     [DataContract]
     public class ItemPedido : BaseModel
-    {   
+    {
         [Required]
         [DataMember]
         public Pedido Pedido { get; private set; }

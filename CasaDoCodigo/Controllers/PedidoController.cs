@@ -1,11 +1,8 @@
-﻿using CasaDoCodigo.Models;
+﻿using System.Collections.Generic;
+using CasaDoCodigo.Models;
+using CasaDoCodigo.Models.ViewModels;
 using CasaDoCodigo.Repositorios;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CasaDoCodigo.Controllers
 {
@@ -36,32 +33,40 @@ namespace CasaDoCodigo.Controllers
                 _repositorioPedido.AddItem(codigo);
             }
 
-            return View(_repositorioPedido.GetPedido().Itens);
+            List<ItemPedido> itens = _repositorioPedido.GetPedido().Itens;
+            CarrinhoViewModel carrinhoViewModel = new CarrinhoViewModel(itens);
+            return base.View(carrinhoViewModel);
         }
 
         public IActionResult Cadastro()
         {
-            return View();
-        }
+            var pedido = _repositorioPedido.GetPedido();
 
-        public IActionResult Resumo()
-        {
-            return View(_repositorioPedido.GetPedido());
+            if (pedido == null)
+            {
+                return RedirectToAction("Carrossel");
+            }
+
+            return View(pedido.Cadastro);
         }
 
         [HttpPost]
-        public void UpdateQuantidade(ItemPedidoDTO itemPedido)
+        [ValidateAntiForgeryToken]
+        public IActionResult Resumo(Cadastro cadastro)
         {
-            Trace.WriteLine(itemPedido);
-           // _repositorioItemPedido.UpdateQuantidade(itemPedido);
+            if (ModelState.IsValid)
+            {
+                return View(_repositorioPedido.UpdateCadastro(cadastro));
+            }
+
+            return RedirectToAction("Cadastro");
         }
 
-        public class ItemPedidoDTO
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public UpdateQuantidadeResponse UpdateQuantidade([FromBody]ItemPedido itemPedido)
         {
-            public string Id { get; set; }
-
-            public string Quantidade { get; set; }
-
+           return _repositorioPedido.UpdateQuantidade(itemPedido);
         }
     }
 }

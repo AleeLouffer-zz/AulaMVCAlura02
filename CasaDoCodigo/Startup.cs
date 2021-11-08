@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using CasaDoCodigo.Repositorios;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace CasaDoCodigo
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,12 +33,14 @@ namespace CasaDoCodigo
             });
 
             services.AddApplicationInsightsTelemetry();
+            services.AddMvc();
             services.AddDistributedMemoryCache();
             services.AddSession();
 
             services.AddTransient<IDataService, DataService>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IHttpHelper, HttpHelper>();
             services.AddTransient<IRepositorioProduto, RepositorioProduto>();
-            services.AddTransient<IRepositorioItemPedido, RepositorioItemPedido>();
             services.AddTransient<IRepositorioCadastro, RepositorioCadastro>();
             services.AddTransient<IRepositorioPedido, RepositorioPedido>();
 
@@ -70,10 +75,11 @@ namespace CasaDoCodigo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Pedido}/{action=Carrossel}/{codigo?}");
+                    pattern: "{controller=Pedido}/{action=BuscaProdutos}/{codigo?}");
             });
 
-            service.GetService<IDataService>().InicializaDB();
+            var dataService = service.GetRequiredService<IDataService>();
+            dataService.InicializaDBAsync(service).Wait();
         }
     }
 }

@@ -1,46 +1,55 @@
-﻿using System.Collections.Generic;
-using CasaDoCodigo.Models;
+﻿using CasaDoCodigo.Models;
 using CasaDoCodigo.Models.ViewModels;
 using CasaDoCodigo.Repositorios;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CasaDoCodigo.Controllers
 {
     public class PedidoController : Controller
     {
-        private readonly IRepositorioProduto _repositorioProduto;
-        private readonly IRepositorioPedido _repositorioPedido;
-        private readonly IRepositorioItemPedido _repositorioItemPedido;
+        private readonly IRepositorioProduto _produtoRepository;
+        private readonly IRepositorioPedido _pedidoRepository;
 
         public PedidoController(IRepositorioProduto repositorioProduto,
-            IRepositorioPedido repositorioPedido,
-            IRepositorioItemPedido repositorioItemPedido)
+            IRepositorioPedido repositorioPedido)
         {
-            _repositorioProduto = repositorioProduto;
-            _repositorioPedido = repositorioPedido;
-            _repositorioItemPedido = repositorioItemPedido;
+            _produtoRepository = repositorioProduto;
+            _pedidoRepository = repositorioPedido;
         }
 
-        public IActionResult Carrossel()
+        public async Task<IActionResult> Carrossel()
         {
-            return View(_repositorioProduto.GetProdutos());
+            return View(await _produtoRepository.GetProdutosAsync());
         }
 
-        public IActionResult Carrinho(string codigo)
+        //MELHORIA: 2) Nova view de Busca de Produtos
+        //Para saber mais: Formação .NET
+        //https://cursos.alura.com.br/formacao-dotnet
+        public async Task<IActionResult> BuscaProdutos(string pesquisa)
+        {
+            return View(await _produtoRepository.GetProdutosAsync(pesquisa));
+        }
+
+        public async Task<IActionResult> Carrinho(string codigo)
         {
             if (!string.IsNullOrEmpty(codigo))
             {
-                _repositorioPedido.AddItem(codigo);
+                await _pedidoRepository.AddItemAsync(codigo);
             }
 
-            List<ItemPedido> itens = _repositorioPedido.GetPedido().Itens;
+            var pedido = await _pedidoRepository.GetPedidoAsync();
+            List<ItemPedido> itens = pedido.Itens;
             CarrinhoViewModel carrinhoViewModel = new CarrinhoViewModel(itens);
             return base.View(carrinhoViewModel);
         }
 
-        public IActionResult Cadastro()
+        public async Task<IActionResult> Cadastro()
         {
-            var pedido = _repositorioPedido.GetPedido();
+            var pedido = await _pedidoRepository.GetPedidoAsync();
 
             if (pedido == null)
             {
@@ -52,21 +61,20 @@ namespace CasaDoCodigo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Resumo(Cadastro cadastro)
+        public async Task<IActionResult> Resumo(Cadastro cadastro)
         {
             if (ModelState.IsValid)
             {
-                return View(_repositorioPedido.UpdateCadastro(cadastro));
+                return View(await _pedidoRepository.UpdateCadastroAsync(cadastro));
             }
-
             return RedirectToAction("Cadastro");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public UpdateQuantidadeResponse UpdateQuantidade([FromBody]ItemPedido itemPedido)
+        public async Task<UpdateQuantidadeResponse> UpdateQuantidade([FromBody] ItemPedido itemPedido)
         {
-           return _repositorioPedido.UpdateQuantidade(itemPedido);
+            return await _pedidoRepository.UpdateQuantidadeAsync(itemPedido);
         }
     }
 }

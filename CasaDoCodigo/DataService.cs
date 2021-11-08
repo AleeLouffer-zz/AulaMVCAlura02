@@ -1,35 +1,40 @@
-﻿using CasaDoCodigo.Models;
-using CasaDoCodigo.Repositorios;
-using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using static CasaDoCodigo.Repositorios.RepositorioProduto;
+using System.Threading.Tasks;
+using CasaDoCodigo.Models;
+using CasaDoCodigo.Repositorios;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace CasaDoCodigo
 {
     class DataService : IDataService
     {
-        private readonly AplicationContext _contexto;
-        private readonly IRepositorioProduto _repositorioProduto;
-
-        public DataService(AplicationContext contexto, IRepositorioProduto repositorioProduto)
+        public async Task InicializaDBAsync(IServiceProvider provider)
         {
-            _contexto = contexto;
-            _repositorioProduto = repositorioProduto;
+            var contexto = provider.GetService<AplicationContext>();
+
+            await contexto.Database.EnsureCreatedAsync();
+
+            await contexto.Database.MigrateAsync();
+
+            if (await contexto.Set<Produto>().AnyAsync())
+            {
+                return;
+            }
+
+            List<Livro> livros = await GetLivrosAsync();
+
+            var repositorioProduto = provider.GetService<IRepositorioProduto>();
+            await repositorioProduto.SaveProdutosAsync(livros);
         }
 
-        public void InicializaDB()
+        private async Task<List<Livro>> GetLivrosAsync()
         {
-            _contexto.Database.EnsureCreated();
-            List<Livro> livros = GetLivros();
-            _repositorioProduto.SaveProdutos(livros);
-        }
-
-        private static List<Livro> GetLivros()
-        {
-            var json = File.ReadAllText("livros.json");
-            var livros = JsonConvert.DeserializeObject<List<Livro>>(json);
-            return livros;
+            var json = await File.ReadAllTextAsync("livros.json");
+            return JsonConvert.DeserializeObject<List<Livro>>(json);
         }
     }
 }

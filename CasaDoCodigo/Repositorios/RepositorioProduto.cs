@@ -1,40 +1,96 @@
 ﻿using CasaDoCodigo.Models;
+using CasaDoCodigo.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CasaDoCodigo.Repositorios
 {
+    public interface IRepositorioProduto
+    {
+        Task SaveProdutosAsync(List<Livro> livros);
+        Task<IList<Produto>> GetProdutosAsync();
+        Task<BuscaPorProdutosViewModel> GetProdutosAsync(string pesquisa);
+    }
+
     public class RepositorioProduto : RepositorioBase<Produto>, IRepositorioProduto
     {
-        public RepositorioProduto(AplicationContext contexto) : base(contexto)
+        public RepositorioProduto(IConfiguration configuration,
+            AplicationContext contexto) : base(configuration, contexto)
         {
         }
 
-        public IList<Produto> GetProdutos()
+        public async Task<IList<Produto>> GetProdutosAsync()
         {
-            return _dbSet.ToList();
+            return await _dbSet
+                .Include(prod => prod.Categoria)
+                .ToListAsync();
         }
 
-        public void SaveProdutos(List<Livro> livros)
+        public async Task<BuscaPorProdutosViewModel> GetProdutosAsync(string pesquisa)
         {
+            IQueryable<Produto> query = _dbSet;
+
+            if (!string.IsNullOrEmpty(pesquisa))
+            {
+                query = query.Where(q => q.Nome.Contains(pesquisa));
+            }
+
+            query = query
+                .Include(prod => prod.Categoria);
+
+            return new BuscaPorProdutosViewModel(await query.ToListAsync(), pesquisa);
+        }
+
+        public async Task SaveProdutosAsync(List<Livro> livros)
+        {
+            await SaveCategorias(livros);
+
             foreach (var livro in livros)
             {
-                if (!_dbSet.Where(p => p.Codigo == livro.Codigo).Any())
+                var categoria =
+                    await _contexto.Set<Categoria>()
+                        .SingleAsync(c => c.Nome == livro.Categoria);
+
+                if (!await _dbSet.Where(p => p.Codigo == livro.Codigo).AnyAsync())
                 {
-                    _dbSet.Add(new Produto(livro.Codigo, livro.Nome, livro.Preco));
+                    await _dbSet.AddAsync(new Produto(livro.Codigo, livro.Nome, livro.Preco, categoria));
                 }
             }
-            _contexto.SaveChanges();
+            await _contexto.SaveChangesAsync();
         }
 
-        public class Livro
+        private async Task SaveCategorias(List<Livro> livros)
         {
-            public string Codigo { get; set; }
-            public string Nome { get; set; }
-            public decimal Preco { get; set; }
+            var categorias =
+                livros
+                    .OrderBy(l => l.Categoria)
+                    .Select(l => l.Categoria)
+                    .Distinct();
+
+            foreach (var nomeCategoria in categorias)
+            {
+                var categoriaDB =
+                    await _contexto.Set<Categoria>()
+                    .SingleOrDefaultAsync(c => c.Nome == nomeCategoria);
+                if (categoriaDB == null)
+                {
+                    await _contexto.Set<Categoria>()
+                        .AddAsync(new Categoria(nomeCategoria));
+                }
+            }
+            await _contexto.SaveChangesAsync();
         }
+    }
+
+    public class Livro
+    {
+        public string Codigo { get; set; }
+        public string Nome { get; set; }
+        public string Categoria { get; set; }
+        public string Subcategoria { get; set; }
+        public decimal Preco { get; set; }
     }
 }

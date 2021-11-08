@@ -1,5 +1,4 @@
-﻿using System;
-using CasaDoCodigo.Models.ViewModels;
+﻿using CasaDoCodigo.Models.ViewModels;
 
 namespace CasaDoCodigo.Models
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace CasaDoCodigo.Models.ViewModels
@@ -14,6 +13,5 @@ namespace CasaDoCodigo.Models.ViewModels
         public IList<ItemPedido> Itens { get; }
 
         public decimal Total => Itens.Sum(i => i.Quantidade * i.PrecoUnitario);
-        
     }
 }

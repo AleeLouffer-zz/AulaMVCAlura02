@@ -1,21 +1,21 @@
 ﻿using CasaDoCodigo.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace CasaDoCodigo.Repositorios
 {
-    public class RepositorioBase<T> where T : BaseModel
+    public abstract class RepositorioBase<T> where T : BaseModel
     {
+        protected readonly IConfiguration _configuration;
         protected readonly AplicationContext _contexto;
         protected readonly DbSet<T> _dbSet;
 
-        public RepositorioBase(AplicationContext contexto)
+        public RepositorioBase(IConfiguration configuration,
+            AplicationContext contexto)
         {
+            _configuration = configuration;
             _contexto = contexto;
-            _dbSet = _contexto.Set<T>();
+            _dbSet = contexto.Set<T>();
         }
     }
 }

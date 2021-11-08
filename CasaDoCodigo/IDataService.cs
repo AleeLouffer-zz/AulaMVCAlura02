@@ -1,7 +1,10 @@
-﻿namespace CasaDoCodigo
+﻿using System;
+using System.Threading.Tasks;
+
+namespace CasaDoCodigo
 {
     interface IDataService
     {
-        void InicializaDB();
+        Task InicializaDBAsync(IServiceProvider provider);
     }
 }

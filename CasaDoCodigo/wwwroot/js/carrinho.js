@@ -4,7 +4,7 @@
         data.Quantidade++;
         this.postQuantidade(data);
     }
-
+    1
     clickDecremento(button) {
         let data = this.getData(button);
         data.Quantidade--;
